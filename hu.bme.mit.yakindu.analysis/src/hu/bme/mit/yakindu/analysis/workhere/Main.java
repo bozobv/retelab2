@@ -37,9 +37,9 @@ public class Main {
 				{
 					System.out.println("Csapda: " + state.getName());
 				}
-				if (state.getName() == "Black") 
+				if (state.getName() == "") 
 				{
-					state.setName("State ");
+					state.setName("State " + nameNumber);
 					nameNumber++;
 					System.out.println("new State: " + state.getName());
 				}
