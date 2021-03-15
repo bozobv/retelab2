@@ -38,22 +38,6 @@ public class Main {
 		// Reading model
 		Statechart s = (Statechart) root;
 		TreeIterator<EObject> iterator = s.eAllContents();
-		ArrayList<VariableDefinition> varDefs = new ArrayList<>();
-		ArrayList<EventDefinition> evDefs = new ArrayList<>();
-		
-		while (iterator.hasNext()) {
-			EObject content = iterator.next();
-
-			if(content instanceof EventDefinition) {
-				EventDefinition evDef = (EventDefinition) content;
-				evDefs.add(evDef);
-			}
-			if(content instanceof VariableDefinition) {
-				VariableDefinition varDef = (VariableDefinition) content;
-				varDefs.add(varDef);
-			}
-		}
-		
 		
 		
 		System.out.println(
@@ -70,31 +54,57 @@ public class Main {
 				"	while(on)\n" +
 				"	{\n" +
 				"		String cmd = reader.readLine();\n" +
-				"		switch(cmd)" +
-				"		{\n" +
-				"			case \"start\": \n" +
-				"				s.raiseStart();\n" +
-				"				s.runCycle();\n" +
-				"			\n" +
-				"			\n" +
-				" 			\n"+
-				"			case \"start\": \n" +
-				"				s.raiseStart();\n" +
-				"				s.runCycle();\n" +
-				"			\n" +
-				"			\n"
+				"		switch(cmd)\n" +
+				"		{\n"
 		);
-			
 		
+		
+		while (iterator.hasNext()) {
+			EObject content = iterator.next();
+			if(content instanceof EventDefinition) {
+				EventDefinition b = (EventDefinition) content;
+				
+					System.out.println(
+					"			case \""+ b.getName() +"\": \n" + 
+					"			sm.raise"+ firstLetter(b.getName()) +"();\n" +
+					"			sm.runCycle();\n" +
+					"			break;\n" 
+					);
+				
+			}
+		}
+		
+		System.out.println(
+				"			case \"exit\":\n" +
+				"			run = false;\n" +
+				"			break;\n" +
+				"			\n" +
+				"			default:\n" +
+				"			System.out.println(\"Unrecognised command.\");\n" +
+				"			break; \n" +
+				"		}\n" +
+				"		print(s);\n" +
+				"	}\n" +
+				"	reader.close();\n" +
+				"	System.exit(0);\n" +
+				"}" +
+				"\n"
+		);
+		System.out.println("}");
 		
 		
 		// Transforming the model into a graph representation
 		String content = model2gml.transform(root);
 		// and saving it
 		manager.saveFile("model_output/graph.gml", content);
+		
+		
 	}
 	
-	
+	private static String firstLetter(String s) 
+	{
+		return s.substring(0,1).toUpperCase() + s.substring(1);
+	}
 	
 	public static void task2()
 	{
